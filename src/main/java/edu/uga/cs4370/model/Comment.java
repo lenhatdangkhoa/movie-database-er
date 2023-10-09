@@ -26,5 +26,6 @@ public class Comment {
   public long getCommentID(){
     return commentID;
   }
-public void setCommentID
 }
+// public void setCommentID
+// }
