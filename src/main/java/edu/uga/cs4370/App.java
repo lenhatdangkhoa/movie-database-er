@@ -6,13 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * Boilerplate code taken from
- * https://dev.mysql.com/doc/connector-j/8.1/en/connector-j-usagenotes-basic.html
- * and modified by the instructor of the course (Sami Menik).
- */
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
+@RestController
 public class App {
     public static void main(String[] args) {
+        SpringApplication.run(App.class, args);
+        /* 
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:33306/movie?" +
@@ -66,5 +71,11 @@ public class App {
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
         }
+        */
+    }
+
+    @RequestMapping("/")
+    public String hello() {
+        return "Hello World 2";
     }
 }
