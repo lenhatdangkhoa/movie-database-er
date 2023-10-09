@@ -14,8 +14,6 @@ import java.sql.Statement;
 public class App {
     public static void main(String[] args) {
         Connection conn = null;
-        Data data = new Data();
-        System.out.println(data.data);
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:33306/movie?" +
                     "user=root&password=Lekhoa699");
