@@ -13,8 +13,8 @@ public class WebController {
 
     @GetMapping("/main-page")
     public ModelAndView page() {
-        ModelAndView mv = new ModelAndView("page1");
-        mv.addObject("message", "hello world!");
+        ModelAndView mv = new ModelAndView("main_page");
+        mv.addObject("message", new int[]{1,2,3,4,5});
         return mv;
     }   
 
