@@ -120,7 +120,7 @@ public class Data {
                 }
             }
             for (String genre : genres) {
-                String query = "INSERT INTO Genre(genre_name) VALUES(\"" + genre+"\");";
+                String query = "INSERT INTO Genre(genre_name) VALUES(\"" + genre +"\");";
                 try {
                     st = conn.createStatement();
                     st.execute(query);

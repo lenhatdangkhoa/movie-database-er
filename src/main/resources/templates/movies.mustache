@@ -9,11 +9,13 @@
 </head>
 <body>
   <h1>{{#movies}}
-  <h2 class="movie">{{.}} </h2>
-  {{/movies}} 
+  <div><h2 class="movie">{{.}} </h2> 
   {{#ratings}}
   <h2>{{.}} </h2>
   {{/ratings}} 
+  </div>
+  {{/movies}} 
+  
   </h1>
 
 </body>
