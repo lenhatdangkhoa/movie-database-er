@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException; 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Set;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Data {
-    Connection conn = null;
+    public Connection conn = null;
     public Data() {
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:33306/movie_rating?" +
