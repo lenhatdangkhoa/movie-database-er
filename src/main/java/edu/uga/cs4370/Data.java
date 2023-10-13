@@ -50,11 +50,11 @@ public class Data {
             "PRIMARY KEY(CommentID))"
             ;
             st.execute(query);
-            query = "ALTER TABLE User ADD CommentID INT NOT NULL;";
+            query = "ALTER TABLE User ADD CommentID INT;";
             st.execute(query);
             query = "ALTER TABLE User ADD FOREIGN KEY(CommentID) REFERENCES Comment(CommentID);";
             st.execute(query);
-            query = "ALTER TABLE Comment ADD UserID INT NOT NULL;";
+            query = "ALTER TABLE Comment ADD UserID INT;";
             st.execute(query);
             query = "ALTER TABLE Comment ADD FOREIGN KEY(UserID) REFERENCES User(UserID);";
             st.execute(query);
