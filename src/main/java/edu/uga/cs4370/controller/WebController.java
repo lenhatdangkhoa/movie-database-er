@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.time.LocalDate;
+import java.util.Random;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -173,10 +175,57 @@ public class WebController {
     }
 
    
-    // @PostMapping("writecomment")
-    // public String writeComment(@RequestParam String comment) {
-        
-    // }
+    @PostMapping("writecomment")
+    public String writeComment(@RequestParam String comment, String userid, String movieid ) {
+        try {
+            Statement st = conn.createStatement();
+            String query = "INSERT INTO Comment(timestamp, comment, rating, UserID) VALUES (\"" +
+            java.time.LocalDate.now().toString() + "\",\"" + comment + "\"," +
+            (new Random().nextInt(5) + 1) +"," + userid + ")";
+            st.execute(query); 
+            ResultSet rs = st.executeQuery("SELECT LAST_INSERT_ID()");
+            int commentID = 0;
+            if (rs.next()) {
+                commentID = rs.getInt(1);
+            }
+            query = "INSERT INTO MovieComment(MovieID, CommentID) VALUES (" + movieid + "," + commentID + ")" ;
+            st.execute(query);
+        } catch (SQLException sqle) {
+             // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return "redirect:/dynamic/getaccount?id=" + userid;
+    }
 
-    
+    @GetMapping("/viewyourcomment")
+    public ModelAndView viewComment(@RequestParam("userid") int userid) {
+        ModelAndView mv = new ModelAndView("comments");
+        List<String> comments = new ArrayList<>();
+        try {
+            Statement st = conn.createStatement();
+            String query = "SELECT comment,movie_name FROM MovieComment "+
+            "JOIN Comment ON MovieComment.CommentID = Comment.CommentID " +
+            "AND Comment.UserID =" + userid + 
+            " JOIN Movie ON MovieComment.MovieID = Movie.MovieID;";
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String temp = rs.getString("movie_name") + ": " + "\"" + 
+                rs.getString("comment") +"\"";
+                comments.add(temp);
+            }
+            mv.addObject("comments", comments);
+            mv.addObject("userid", userid);
+        } catch (SQLException sqle) {
+             // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return mv;
+    }
+
+
+
 }

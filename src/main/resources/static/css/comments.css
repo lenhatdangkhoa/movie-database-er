@@ -1,0 +1,10 @@
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: gray;
+    color: rgb(160, 248, 160);
+}
+h1 {
+    text-align: center;
+    background-color: black;
+    color: white;
+}
