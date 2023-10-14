@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.ArrayList;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -31,7 +33,7 @@ public class WebController {
             System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }
-    @GetMapping("/main-page")
+    @GetMapping("/main")
     public ModelAndView page() {
         ModelAndView mv = new ModelAndView("main");
         mv.addObject("message", new int[]{1,2,3,4,5});
@@ -86,5 +88,93 @@ public class WebController {
         
         return mv;
     } 
+    @GetMapping("registration")
+    public ModelAndView registration() {
+        ModelAndView mv = new ModelAndView("registration");
+        mv.addObject("error", "");
+        return mv;
+    }
+
+    /**
+     * Handle POST request for creating user's account. 
+     * @param username
+     * @param password
+     * @param dob
+     * @return
+     */
+    @PostMapping("createaccount")
+    public String createAccount(@RequestParam String username, String password, String dob) {
+        try {
+            Statement st = conn.createStatement();
+            String query = "INSERT INTO User (username, password, dob, CommentID) VALUES (\"" +
+            username + "\",\"" + password + "\",\"" + dob + "\",NULL);";
+            st.execute(query);
+        } catch (SQLException sqle) {
+            // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return "redirect:/dynamic/movies";
+    }
+
+    @PostMapping("getaccount")
+    public String checkAccount(@RequestParam String username, String password) {
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT UserID FROM User WHERE username=\"" +
+            username +"\"AND password=\"" + password +"\";");
+            
+            if (rs.next()) { // checks if the set is empty
+                return "redirect:/dynamic/getaccount?id=" + rs.getInt("UserID");           
+            } 
+
+        } catch (SQLException sqle) {
+            // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return "redirect:/dynamic/registration";
+    }
+
+    /**
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping("getaccount")
+    public ModelAndView getAccount(@RequestParam("id") int id) {
+        ModelAndView mv = new ModelAndView("user");
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM User Where UserID = "+id);
+            rs.next();
+            mv.addObject("username", rs.getString("username"));
+            mv.addObject("id", id);
+            List<String> movies = new ArrayList<>();
+            List<String> moviesId = new ArrayList<>();
+            rs = st.executeQuery("SELECT * FROM Movie");
+            while (rs.next()) {
+                movies.add(rs.getString("movie_name"));
+                moviesId.add(rs.getString("MovieID"));
+            }
+            mv.addObject("movies", movies);
+            mv.addObject("movieid", moviesId);
+        } catch (SQLException sqle) {
+             // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return mv;
+    }
+
+   
+    // @PostMapping("writecomment")
+    // public String writeComment(@RequestParam String comment) {
+        
+    // }
+
     
 }

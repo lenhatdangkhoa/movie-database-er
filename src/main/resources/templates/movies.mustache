@@ -8,15 +8,19 @@
   <link rel="stylesheet" href="/css/movies.css" >
 </head>
 <body>
-  <h1>{{#movies}}
-  <div><h2 class="movie">{{.}} </h2> 
+<h1 class="title">Movie Rating App</h1>
+<div class="main_body">
+<div class="movies">
+{{#movies}}
+  <h2 class="movie">{{.}} </h2> 
+{{/movies}} 
+</div>
+  <div class="star">
   {{#ratings}}
   <h2>{{.}} </h2>
   {{/ratings}} 
   </div>
-  {{/movies}} 
-  
-  </h1>
 
+</div>
 </body>
 </html>
