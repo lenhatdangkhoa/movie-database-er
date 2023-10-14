@@ -226,6 +226,36 @@ public class WebController {
         return mv;
     }
 
+    @GetMapping("allcomments")
+    public ModelAndView showAllComments() {
+        ModelAndView mv = new ModelAndView("allcomments");
+        List<String> descriptions = new ArrayList<>();
+        try {
+            Statement st = conn.createStatement();
+            String query = "SELECT username, movie_name, comment FROM MovieComment " +
+            "JOIN Comment ON MovieComment.CommentID = Comment.CommentID " +
+            "JOIN Movie ON MovieComment.MovieID = Movie.MovieID " +
+            "JOIN User ON Comment.UserID = User.UserID;";
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String temp = rs.getString("movie_name") + ": \"" + 
+                rs.getString("comment") +".\" By : " + rs.getString("username");
+                descriptions.add(temp);
+            }
+            mv.addObject("descriptions", descriptions);
+            rs = st.executeQuery("SELECT COUNT(CommentID) as total_comments FROM Comment");
+            rs.next();
+            int commentCounts = Integer.parseInt(rs.getString("total_comments"));
+            mv.addObject("commentcounts", commentCounts);
+
+        } catch (SQLException sqle) {
+            // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return mv;
+    }
 
 
 }

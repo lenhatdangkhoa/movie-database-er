@@ -8,5 +8,5 @@ page 1: landing page \ -> /dynamic/movies (need to work on genre)
 page 2: login/register \ -> /dynamic/registration (done)
 page 3: user's profile (user accs and comments/rating)\ -> /dynamic/user_id (done)
 page 4: user's comment page\ -> done
-page 5: all movies comment page\ 
+page 5: all movies comment page\ -> get all user's comments and movie
 5 data retrieval queries (2 joins, 1 aggregate function)
