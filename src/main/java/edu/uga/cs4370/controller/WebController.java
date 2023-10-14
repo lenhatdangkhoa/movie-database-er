@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -152,6 +153,7 @@ public class WebController {
             rs.next();
             mv.addObject("username", rs.getString("username"));
             mv.addObject("id", id);
+            HashMap<String, String> map = new HashMap<>();
             List<String> movies = new ArrayList<>();
             List<String> moviesId = new ArrayList<>();
             rs = st.executeQuery("SELECT * FROM Movie");
