@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello, world!</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="/css/user.css" >
+</head>
+<body>
+  <h1>Welcome, {{username}} {{id}}</h1>
+<div class="main">
+    <div class="movie_list">
+    {{#movies}}
+    <h2>{{.}}</h2>
+    {{/movies}}
+    </div>
+    <div class="movie_id_list">
+    {{#movieid}}
+        <form action="/dynamic/writecomment" method="POST">
+            <button id={{.}} type="submit">Write Comment</button>
+        </form>
+    {{/movieid}}
+    </div>
+</div>
+</body>
+</html>

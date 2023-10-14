@@ -9,11 +9,18 @@
 </head>
 <body>
 <form action="/dynamic/createaccount" method="POST">
-        <input type="text" name="username"/>       
-        <input type="text" name="password"/> 
-        <input type="text" name="dob"/>   
-
-        <input type="submit"/>
+        <input type="text" name="username" placeholder="Username"/>       
+        <input type="text" name="password" placeholder="Password"/> 
+        <input type="text" name="dob" placeholder="Date of Birth (mm/dd/yyyy)"/>   
+        <input type="submit" value="Register"/>
 </form>
+<form action="/dynamic/getaccount" method="POST">
+        <input type="text" name="username" placeholder="Username"/>       
+        <input type="text" name="password" placeholder="Password"/> 
+        <input type="submit" value="Login"/>
+</form>
+{{^error}}
+Error
+{{/error}}
 </body>
 </html>
