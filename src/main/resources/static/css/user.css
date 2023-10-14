@@ -1,5 +1,6 @@
 .main {
     display: flex;
+    justify-content: space-between;
 }
 
 form {
@@ -9,4 +10,16 @@ form {
 
 input {
     width: 100px;
+}
+button {
+    background-color: lightblue;
+    border-radius: 5px
+}
+
+#view {
+    width:150px;
+    height: 100px;
+    font-size: 25px;
+    background-color: green;
+    color: white;
 }

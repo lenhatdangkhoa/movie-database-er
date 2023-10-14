@@ -5,14 +5,13 @@
   <title>Hello, world!</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="" />
-  <link rel="stylesheet" href="/css/main_page.css" >
+  <link rel="stylesheet" href="/css/comments.css">
 </head>
+<h1>Your comment</h1>
 <body>
-  <h1>{{#message}}
-  <h2>{{.}}</h2>
-  {{/message}}
-  {{test}}
-  </h1>
-  
+    {{#comments}}
+    <h3>{{.}}</h3>
+    {{/comments}}
+    <div><a href ="/dynamic/getaccount?id={{userid}}"><button>Add More Comments</button></a></div>
 </body>
 </html>
