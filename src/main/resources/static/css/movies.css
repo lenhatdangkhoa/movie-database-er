@@ -6,9 +6,12 @@
 }
 .movies {
     margin-top:0;
+    color: red;
 }
 .title {
     text-align: center;
+    background-color: darkgreen;
+    color: yellow;
     font-family: Arial, Helvetica, sans-serif;
 }
 
