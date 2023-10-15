@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.time.LocalDate;
 import java.util.Random;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,13 +35,6 @@ public class WebController {
             System.out.println("VendorError: " + sqle.getErrorCode());
         }
     }
-    @GetMapping("/main")
-    public ModelAndView page() {
-        ModelAndView mv = new ModelAndView("main");
-        mv.addObject("message", new int[]{1,2,3,4,5});
-        mv.addObject("test", "easy");
-        return mv;
-    }   
 
     /**
      * A get request endpoint at /dynamic/movies to retrieve all movies from the database.
@@ -53,6 +45,7 @@ public class WebController {
         ModelAndView mv = new ModelAndView("movies");
         List<String> movies = new ArrayList<>();
         List<String> ratings = new ArrayList<>();
+        List<String> genres = new ArrayList<>();
         try {
             Statement st = conn.createStatement();
             ResultSet res =st.executeQuery("SELECT * FROM Movie");
@@ -77,11 +70,35 @@ public class WebController {
                     default:
                         break;
                 }
-                movies.add(res.getString("movie_name"));
+                movies.add(res.getString("movie_name") );
                 ratings.add(temp);
+
+            }
+            
+            mv.addObject("ratings", ratings);
+            for (String movie : movies) {
+                ResultSet res2 = st.executeQuery("SELECT genre_name FROM MovieGenre " +
+                    "JOIN Genre ON MovieGenre.GenreID = Genre.GenreID " +
+                    "JOIN Movie ON MovieGenre.MovieID = Movie.MovieID " + 
+                    "WHERE movie_name = \"" + movie + "\"");
+                String genre = "";
+                while (res2.next()) {
+                    genre += res2.getString("genre_name") + "  ";
+                }
+                
+                genres.add(genre);
+            }
+            for (int i = 0; i < movies.size(); i++) {
+                String temp = "";
+                if (genres.get(i).length() == 0) {
+                    temp = movies.get(i) + "| Action";
+                } else {
+                    temp = movies.get(i) + "| " + genres.get(i);
+                }
+                movies.set(i, temp);
             }
             mv.addObject("movies", movies);
-            mv.addObject("ratings", ratings);
+
         } catch (SQLException sqle) {
              // handle any errors
             System.out.println("SQLException: " + sqle.getMessage());
@@ -226,6 +243,37 @@ public class WebController {
         return mv;
     }
 
+    @GetMapping("allcomments")
+    public ModelAndView showAllComments() {
+        ModelAndView mv = new ModelAndView("allcomments");
+        List<String> descriptions = new ArrayList<>();
+        try {
+            Statement st = conn.createStatement();
+            String query = "SELECT username, movie_name, comment, timestamp FROM MovieComment " +
+            "JOIN Comment ON MovieComment.CommentID = Comment.CommentID " +
+            "JOIN Movie ON MovieComment.MovieID = Movie.MovieID " +
+            "JOIN User ON Comment.UserID = User.UserID;";
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                String temp = rs.getString("movie_name") + ": \"" + 
+                rs.getString("comment") + ".\" By : " + rs.getString("username") +
+                " (" + rs.getString("timestamp") + ")";
+                descriptions.add(temp);
+            }
+            mv.addObject("descriptions", descriptions);
+            rs = st.executeQuery("SELECT COUNT(CommentID) as total_comments FROM Comment");
+            rs.next();
+            int commentCounts = Integer.parseInt(rs.getString("total_comments"));
+            mv.addObject("commentcounts", commentCounts);
+
+        } catch (SQLException sqle) {
+            // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return mv;
+    }
 
 
 }

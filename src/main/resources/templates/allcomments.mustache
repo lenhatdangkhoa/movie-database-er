@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello, world!</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="stylesheet" href="/css/allcomments.css">
+</head>
+<h1>All Comments</h1>
+<body>
+    {{#descriptions}}
+    <h3>{{.}}</h3>
+    {{/descriptions}}
+    <h2>Total comments: {{commentcounts}}</h2>
+    <a href="/dynamic/movies"><button>Back To Movies</button></a>
+</body>
+</html>

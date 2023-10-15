@@ -100,10 +100,11 @@ public class Data {
             Set<String> genres = new HashSet<>();
             for (int i = 0; i < 50; i++) {
                 try {
-                    String query = "INSERT INTO Movie VALUES("+i + "," + (1 + new Random().nextFloat() * 4) + ",\"" +
+                    String query = "INSERT INTO Movie VALUES("+ i + "," + (1 + new Random().nextFloat() * 4) + ",\"" +
                     data.get(i)[1] +"\", \"Very cool movie! Should watch!\");" ;
                     st = conn.createStatement();
-                    st.execute(query);
+                    System.out.println(data.get(i)[1]);
+                    //st.execute(query);
                 } catch(SQLException sqle) {
                     // handle any errors
                     System.out.println("SQLException: " + sqle.getMessage());
@@ -113,12 +114,13 @@ public class Data {
                 for (String genre : data.get(i)[2].split("\\|")) {
                     genres.add(genre);
                 }
+
             }
             for (String genre : genres) {
                 String query = "INSERT INTO Genre(genre_name) VALUES(\"" + genre +"\");";
                 try {
                     st = conn.createStatement();
-                    st.execute(query);
+                    //st.execute(query);
                 } catch(SQLException sqle) {
                     // handle any errors
                     System.out.println("SQLException: " + sqle.getMessage());
@@ -133,7 +135,7 @@ public class Data {
                     i + ","+list.indexOf(genre)+");";
                     try {
                     st = conn.createStatement();
-                    st.execute(query);
+                    //st.execute(query);
                 } catch(SQLException sqle) {
                     // handle any errors
                     System.out.println("SQLException: " + sqle.getMessage());
@@ -149,7 +151,7 @@ public class Data {
     }
     public static void main(String[] args) {
         Data data = new Data();
-        data.initializeTables();
+        //data.initializeTables();
         data.initializeData();
 
     }
