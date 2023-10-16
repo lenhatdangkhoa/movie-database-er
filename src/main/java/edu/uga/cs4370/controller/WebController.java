@@ -138,6 +138,29 @@ public class WebController {
         return "redirect:/dynamic/movies";
     }
 
+    @PostMapping("deletemovie")
+    public String createAccount(@RequestParam String movie_name) {
+        try {
+            Statement st = conn.createStatement();
+            String query = "SELECT * FROM Movie WHERE movie_name = \"" + movie_name + "\"";
+            ResultSet res = st.executeQuery(query);
+            String movieid = "";
+            while (res.next()) {
+                movieid = res.getString("MovieID");
+            }
+            st.execute("DELETE FROM MovieComment WHERE MovieID = " + movieid);
+            st.execute("DELETE FROM MovieGenre WHERE MovieID = " + movieid);
+            st.execute("DELETE FROM Movie WHERE MovieID = " + movieid);
+
+        } catch (SQLException sqle) {
+            // handle any errors
+            System.out.println("SQLException: " + sqle.getMessage());
+            System.out.println("SQLState: " + sqle.getSQLState());
+            System.out.println("VendorError: " + sqle.getErrorCode());
+        }
+        return "redirect:/dynamic/movies";
+    }
+
     @PostMapping("getaccount")
     public String checkAccount(@RequestParam String username, String password) {
         try {
@@ -172,7 +195,6 @@ public class WebController {
             rs.next();
             mv.addObject("username", rs.getString("username"));
             mv.addObject("id", id);
-            HashMap<String, String> map = new HashMap<>();
             List<String> movies = new ArrayList<>();
             List<String> moviesId = new ArrayList<>();
             rs = st.executeQuery("SELECT * FROM Movie");
@@ -261,7 +283,7 @@ public class WebController {
                 descriptions.add(temp);
             }
             mv.addObject("descriptions", descriptions);
-            rs = st.executeQuery("SELECT COUNT(CommentID) as total_comments FROM Comment");
+            rs = st.executeQuery("SELECT COUNT(*) as total_comments FROM MovieComment");
             rs.next();
             int commentCounts = Integer.parseInt(rs.getString("total_comments"));
             mv.addObject("commentcounts", commentCounts);
