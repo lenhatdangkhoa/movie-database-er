@@ -47,11 +47,13 @@ public class Data {
             "timestamp TEXT, " +
             "comment VARCHAR(150), " +
             "rating FLOAT, " +
-            "PRIMARY KEY(CommentID))";
+            "UserID INT NOT NULL, " +
+            "PRIMARY KEY(CommentID), " +
+            "FOREIGN KEY (UserID) REFERENCES User(UserID));";
             st.execute(query);
-            query = "ALTER TABLE Comment ADD UserID INT;";
+            query = "ALTER TABLE User ADD CommentID INT;";
             st.execute(query);
-            query = "ALTER TABLE Comment ADD FOREIGN KEY(UserID) REFERENCES User(UserID);";
+            query = "ALTER TABLE User ADD FOREIGN KEY(CommentID) REFERENCES Comment(CommentID);";
             st.execute(query);
             query = "CREATE TABLE Movie(" +
             "MovieID INT UNIQUE NOT NULL AUTO_INCREMENT, " +
@@ -66,7 +68,7 @@ public class Data {
             "PRIMARY KEY(GenreID));";
             st.execute(query);
             query = "CREATE TABLE MovieComment(" +
-            "MovieCommentID INT NOT NULL, " +
+            "MovieCommentID INT NOT NULL AUTO_INCREMENT, " +
             "MovieID INT NOT NULL, " +
             "CommentID INT NOT NULL, " +
             "PRIMARY KEY(MovieCommentID), " +
@@ -100,11 +102,10 @@ public class Data {
             Set<String> genres = new HashSet<>();
             for (int i = 0; i < 50; i++) {
                 try {
-                    String query = "INSERT INTO Movie VALUES("+ i + "," + (1 + new Random().nextFloat() * 4) + ",\"" +
+                    String query = "INSERT INTO Movie VALUES("+ (i+1) + "," + (1 + new Random().nextFloat() * 4) + ",\"" +
                     data.get(i)[1] +"\", \"Very cool movie! Should watch!\");" ;
                     st = conn.createStatement();
-                    System.out.println(data.get(i)[1]);
-                    //st.execute(query);
+                    st.execute(query);
                 } catch(SQLException sqle) {
                     // handle any errors
                     System.out.println("SQLException: " + sqle.getMessage());
@@ -120,22 +121,24 @@ public class Data {
                 String query = "INSERT INTO Genre(genre_name) VALUES(\"" + genre +"\");";
                 try {
                     st = conn.createStatement();
-                    //st.execute(query);
+                    st.execute(query);
                 } catch(SQLException sqle) {
-                    // handle any errors
+                    //handle any errors
                     System.out.println("SQLException: " + sqle.getMessage());
                     System.out.println("SQLState: " + sqle.getSQLState());
                     System.out.println("VendorError: " + sqle.getErrorCode());
                 }
             }
             List<String> list = new ArrayList<>(genres);
+            int j = 0;
             for (int i = 0; i < 50; i++) {
                 for (String genre : data.get(i)[2].split("\\|")) {
-                    String query = "INSERT INTO MovieGenre VALUES("+(i + list.indexOf(genre)) + "," +
-                    i + ","+list.indexOf(genre)+");";
+                    String query = "INSERT INTO MovieGenre VALUES("+ (j + 1) + "," +
+                    (i + 1) + "," + (list.indexOf(genre) + 1) +");";
                     try {
                     st = conn.createStatement();
-                    //st.execute(query);
+                    st.execute(query);
+                    j++;
                 } catch(SQLException sqle) {
                     // handle any errors
                     System.out.println("SQLException: " + sqle.getMessage());
@@ -151,7 +154,7 @@ public class Data {
     }
     public static void main(String[] args) {
         Data data = new Data();
-        //data.initializeTables();
+        data.initializeTables();
         data.initializeData();
 
     }
